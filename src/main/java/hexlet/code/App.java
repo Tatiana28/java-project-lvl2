@@ -6,11 +6,27 @@ package hexlet.code;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+import static picocli.CommandLine.Option;
+import static picocli.CommandLine.Parameters;
+
 @Command(name = "gendiff", mixinStandardHelpOptions = true, description = "Compares two configuration files and shows a difference.")
 public class App implements Runnable {
 
+    @Parameters(index = "0", description = "path to first file", paramLabel = "filepath1")
+    private String filepath1;
+
+    @Parameters(index = "1", description = "path to second file", paramLabel = "filepath2")
+    private String filepath2;
+
+    @Option(names = {"-f", "--format"}, description = "output format [default: ${DEFAULT-VALUE}]", paramLabel = "format", defaultValue = "stylish")
+    private String format;
+
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new App()).execute(args);
+        App command = new App();
+        int exitCode = new CommandLine(command)
+                .setOptionsCaseInsensitive(true)
+                .setSubcommandsCaseInsensitive(true)
+                .execute(args);
         System.exit(exitCode);
     }
 
